@@ -33,9 +33,10 @@ public class DataHandler {
         initPostParams();
         initPostMap();
     }
+
     private void initPostParams(){
-        Document doc = getDocumentByUrl(STOCK_URL);
         try {
+            Document doc = getDocumentByUrl(STOCK_URL);
             mViewState = doc.select("input#__VIEWSTATE").first().attr("value");
             mValidation = doc.select("input#__EVENTVALIDATION").first().attr("value");
             mSp_Date = doc.select("span#sp_Date").first().text();
@@ -83,7 +84,7 @@ public class DataHandler {
         return mDataSize;
     }
 
-    public Document getDocumentByUrl(String url){
+    private Document getDocumentByUrl(String url){
         try {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
@@ -93,7 +94,7 @@ public class DataHandler {
         }
     }
 
-    public Document getDocumentByUrlWithPostMap(String url, Map<String, String> map){
+    private Document getDocumentByUrlWithPostMap(String url, Map<String, String> map){
         try {
             return Jsoup.connect(url).data(map).post();
         } catch (IOException e) {

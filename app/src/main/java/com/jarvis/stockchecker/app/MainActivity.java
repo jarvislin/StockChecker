@@ -23,8 +23,6 @@ public class MainActivity extends ActionBarActivity {
     private TableLayout mStockList;
     private Context mContext;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +33,6 @@ public class MainActivity extends ActionBarActivity {
         if(!isNetworkAvailable())
             ErrorMessage.showNetworkErrorMessage(this);
     }
-
-
 
     private void setNetwork(){
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -75,16 +71,28 @@ public class MainActivity extends ActionBarActivity {
 
     public void update(DataHandler dataHandler){
         mStockList.removeAllViews();
-        for(int i = 1 ; i < dataHandler.getDataSize() ; i++){
+        for(int i = 0 ; i <= dataHandler.getDataSize() ; i++){
 
             StockData tempData = dataHandler.getStockData(i);
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
             View row = inflater.inflate(R.layout.stock_row, null);
+            TextView num = (TextView) row.findViewById(R.id.num);
             TextView name = (TextView) row.findViewById(R.id.name);
             TextView price = (TextView) row.findViewById(R.id.price);
             TextView bought = (TextView) row.findViewById(R.id.bought);
             TextView sold = (TextView) row.findViewById(R.id.sold);
 
+            if(i == 0){
+                num.setText(R.string.num);
+                name.setText(R.string.name);
+                price.setText(R.string.price);
+                bought.setText(R.string.bought);
+                sold.setText(R.string.sold);
+                mStockList.addView(row);
+                continue;
+            }
+
+            num.setText(String.valueOf(i));
             name.setText(tempData.getName());
             price.setText(tempData.getPrice());
             bought.setText(tempData.getBought());
