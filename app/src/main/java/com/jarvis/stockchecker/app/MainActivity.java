@@ -1,5 +1,8 @@
 package com.jarvis.stockchecker.app;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -17,6 +20,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,14 +45,14 @@ public class MainActivity extends ActionBarActivity {
 
         mStockNumber = "1477";
 
-        DataPreprocessor processor = new DataPreprocessor(mStockNumber);
+        if(!isNetworkAvailable())
+            ErrorＭessage.showNetworkErrorMessage(this);
 
-
-
-
-        String url = "http://bsr.twse.com.tw/bshtm/bsContent.aspx?StartNumber=" + mStockNumber + "&FocusIndex=All_"+processor.getPage();
-
-        Log.e("HTML", DataFetcher.getHtmlContent(url));
+        else {
+            DataHandler dataHandler = new DataHandler(mStockNumber, this);
+            StockData temp = dataHandler.getStockData(dataHandler.getDataSize());
+            Log.e("DATA", temp.getName()+"@"+temp.getPrice()+"@"+temp.getBought()+"@"+temp.getSold());
+        }
 
 
     }
@@ -60,5 +66,12 @@ public class MainActivity extends ActionBarActivity {
         StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
                 .detectLeakedSqlLiteObjects().penaltyLog().penaltyDeath()
                 .build());
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager
+                .getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
