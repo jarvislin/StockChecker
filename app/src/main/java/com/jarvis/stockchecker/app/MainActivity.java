@@ -7,29 +7,33 @@ import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-    private String mStockNumber;
+    private Button mButtonSubmit;
+    private EditText mInputStockNumer;
+    private TableLayout mStockList;
+    private Context mContext;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNetwork();
         setContentView(R.layout.activity_main);
-
-        mStockNumber = "1477";
+        findViews();
 
         if(!isNetworkAvailable())
             ErrorMessage.showNetworkErrorMessage(this);
-
-        else {
-            DataHandler dataHandler = new DataHandler(mStockNumber, this);
-            StockData temp = dataHandler.getStockData(dataHandler.getDataSize());
-            Log.e("DATA", temp.getName()+"@"+temp.getPrice()+"@"+temp.getBought()+"@"+temp.getSold());
-        }
-
-
     }
 
 
@@ -49,4 +53,47 @@ public class MainActivity extends ActionBarActivity {
                 .getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void findViews(){
+        mContext = this;
+        mInputStockNumer = (EditText) findViewById(R.id.input_number);
+        mButtonSubmit = (Button) findViewById(R.id.submit);
+        mButtonSubmit.setOnClickListener(clickSubmit(mInputStockNumer));
+        mStockList = (TableLayout) findViewById(R.id.stock_list);
+        mStockList.setStretchAllColumns(true);
+    }
+
+    private Button.OnClickListener clickSubmit(final EditText edittext){
+        return new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                UpdateTask updateTask = new UpdateTask(mContext);
+                updateTask.execute(edittext.getText().toString());
+            }
+         };
+    }
+
+    public void update(DataHandler dataHandler){
+        mStockList.removeAllViews();
+        for(int i = 1 ; i < dataHandler.getDataSize() ; i++){
+
+            StockData tempData = dataHandler.getStockData(i);
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            View row = inflater.inflate(R.layout.stock_row, null);
+            TextView name = (TextView) row.findViewById(R.id.name);
+            TextView price = (TextView) row.findViewById(R.id.price);
+            TextView bought = (TextView) row.findViewById(R.id.bought);
+            TextView sold = (TextView) row.findViewById(R.id.sold);
+
+            name.setText(tempData.getName());
+            price.setText(tempData.getPrice());
+            bought.setText(tempData.getBought());
+            sold.setText(tempData.getSold());
+
+            mStockList.addView(row);
+        }
+    }
+
+
+
 }

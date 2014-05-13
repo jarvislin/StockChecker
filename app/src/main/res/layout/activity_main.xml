@@ -9,8 +9,47 @@
     tools:context="com.jarvis.stockchecker.app.MainActivity">
 
     <TextView
-        android:text="@string/hello_world"
+        android:id="@+id/top_text"
+        android:text="@string/input_stock_number"
+        android:textSize="20sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/top"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/top_text">
+
+        <EditText
+            android:id="@+id/input_number"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="bottom"/>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:text="@string/submit"/>
+        </LinearLayout>
+    <ScrollView
+        android:id="@+id/stock_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top">
+
+        <TableLayout
+            android:id="@+id/stock_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></TableLayout>
+
+        </ScrollView>
+
+
 
 </RelativeLayout>

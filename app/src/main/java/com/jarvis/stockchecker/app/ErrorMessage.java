@@ -13,7 +13,7 @@ public class ErrorMessage {
         Toast.makeText(context,"網路有問題, 請確認是否連上網路.", Toast.LENGTH_LONG).show();
     }
     public static void showSiteErrorMessage(Context context){
-        Toast.makeText(context,"網站有問題, 請稍後再試!", Toast.LENGTH_LONG).show();
+        Toast.makeText(context,"連不上網站, 請再試一次!", Toast.LENGTH_LONG).show();
     }
 
 }
