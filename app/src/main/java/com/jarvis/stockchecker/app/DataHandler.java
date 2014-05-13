@@ -42,7 +42,7 @@ public class DataHandler {
         }
         catch (Exception ex){
             ex.printStackTrace();
-            ErrorＭessage.showSiteErrorMessage(mContext);
+            ErrorMessage.showSiteErrorMessage(mContext);
         }
     }
 
@@ -88,7 +88,7 @@ public class DataHandler {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorＭessage.showSiteErrorMessage(mContext);
+            ErrorMessage.showSiteErrorMessage(mContext);
             return null;
         }
     }
@@ -98,7 +98,7 @@ public class DataHandler {
             return Jsoup.connect(url).data(map).post();
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorＭessage.showSiteErrorMessage(mContext);
+            ErrorMessage.showSiteErrorMessage(mContext);
             return null;
         }
     }
