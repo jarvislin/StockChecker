@@ -6,14 +6,11 @@ import android.net.NetworkInfo;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 

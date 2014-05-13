@@ -62,14 +62,17 @@ public class DataHandler {
 
     private void fetchStockData(){
         Document doc = getDocumentByUrl("http://bsr.twse.com.tw/bshtm/bsContent.aspx?StartNumber=" + mStockNumber + "&FocusIndex=All_" + getPage());
-        Elements numbers = doc.select("td.column_value_center");
-        Elements stockNumbers = doc.select("td.column_value_left");
-        Elements stockTransactions = doc.select("td.column_value_right"); //順序是price, amount of bought, amount of sold...
-        mDataSize = numbers.size();
-
-        for (int i = 0; i < stockTransactions.size(); i += 3) {
-            addData(Integer.valueOf(numbers.get(i / 3).text()), new StockData(stockNumbers.get(i / 3).text(), stockTransactions.get(i).text(), stockTransactions.get(i + 1).text(), stockTransactions.get(i + 2).text()));
+        if(doc!=null&&getPage()!=null) {
+            Elements numbers = doc.select("td.column_value_center");
+            Elements stockNumbers = doc.select("td.column_value_left");
+            Elements stockTransactions = doc.select("td.column_value_right"); //順序是price, amount of bought, amount of sold...
+            mDataSize = numbers.size();
+            for (int i = 0; i < stockTransactions.size(); i += 3) {
+                addData(Integer.valueOf(numbers.get(i / 3).text()), new StockData(stockNumbers.get(i / 3).text(), stockTransactions.get(i).text(), stockTransactions.get(i + 1).text(), stockTransactions.get(i + 2).text()));
+            }
         }
+        else
+            ErrorMessage.showSiteErrorMessage(mContext);
     }
 
     private void addData(int key, StockData data){
@@ -89,7 +92,6 @@ public class DataHandler {
             return Jsoup.connect(url).get();
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorMessage.showSiteErrorMessage(mContext);
             return null;
         }
     }
@@ -99,7 +101,6 @@ public class DataHandler {
             return Jsoup.connect(url).data(map).post();
         } catch (IOException e) {
             e.printStackTrace();
-            ErrorMessage.showSiteErrorMessage(mContext);
             return null;
         }
     }
